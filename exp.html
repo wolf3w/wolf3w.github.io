@@ -1,0 +1,32 @@
+<head>
+	<meta charset="UTF-8">
+	<title>Personal</title>
+</head>
+
+<body>
+	<div class="upperMenu">
+		<p><a href="helpful.html">Полезные ссылки</a></p>
+		<p><a href="exp.html">Личные заметки</a></p>
+	</div>
+
+	<div class="content">
+		<div class="expBlock">
+			<h1>OpenMP</h1>
+			<div class="para">
+				<p>Если обрабатывать массив объектов и вызвать в параллельной секции метод у объекта, то
+				возможен segmentation fault если внутри метода есть указатель на метод класса и даже если он 100%
+				инициализирован, столкнулся на работе:
+				#pragma omp parallel for
+				...
+				arr[i].getPressure(params);
+
+				В getPressure():
+				double (*BHPC::solver) ();
+				solver = BHPC::RungeKutta();
+				...
+				return (this->*solver)(); // SIGSEGV Segmentation fault
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
