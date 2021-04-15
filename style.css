@@ -1,0 +1,20 @@
+.upperMenu {
+	list-style: none;
+	margin: 40px 0 5px;
+	padding: 5px 0 5px;
+	text-align: center;
+	background: white;
+}
+
+.upperMenu li { display: inline-block; }
+
+.upperMenu a {
+	text-decoration: none;
+	position: relative;
+	display: inline-block;
+	padding-bottom: 20px;
+	margin: 0 34px 0 30px;
+}
+
+.upperMenu a, .upperMenu a:visited { color: #9d999d; }
+.upperMenu a.current, .upperMenu a:hover { color: #feb386; }
