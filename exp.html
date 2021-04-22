@@ -2,6 +2,10 @@
 	<meta charset="UTF-8">
 	<title>Personal</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 </head>
 
 <body>
@@ -14,22 +18,25 @@
 	<div class="content">
 		<div class="expBlock">
 			<h1>OpenMP</h1>
-			<div class="para">
-				<p>Если обрабатывать массив объектов и вызвать в параллельной секции метод у объекта, то
-				возможен segmentation fault если внутри метода есть указатель на метод класса и даже если он 100%
-				инициализирован, столкнулся на работе:
-				<code>
-				#pragma omp parallel for
-				...
-				arr[i].getPressure(params);
-				</code>
-				В getPressure():
-				<code>
-				double (*BHPC::solver) ();
-				solver = BHPC::RungeKutta();
-				...
-				return (this->*solver)(); // SIGSEGV Segmentation fault
-				</code>
+			<div class="paragraph">
+				<p>
+				В одном потоке инициализированная переменная обрабатывается корректно, но в случае передачи
+				в параллельный сегмент кода, она может быть в каком-либо потоке проинициализированна мусором 
+				в случае указания private(). Столкнулся на работе:
+				
+				<pre><code class="c++">
+				#pragma omp parallel private(mtd)
+				{
+					#pragma omp for private(i)
+					for (i = 0; i < N; i++) {
+						barr[i].findPressure(..., mtd, ...);
+					}
+				}
+				</code></pre>
+				Происходила ошибка из-за инициализированного мусором mtd в параллельном потоке, решение:
+				<pre><code class="c++">
+				#pragma omp parallel firstprivate(mtd)
+				</code></pre>
 				</p>
 			</div>
 		</div>
